@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Создание и обучение модели машинного обучения RandomForestClassifier на построенных данных из папки «train».') {
+            steps {
+                    sh 'python3 scr/data_creation.py'
+            }
+        }
+
+        stage('Предобработка данных с помощью sklearn.preprocessing.StandardScaler.') {
+            steps {
+                    sh 'python3 scr/model_preprocessing.py'
+            }
+        }
+
+        stage('Создает и обучает модель машинного обучения на построенных данных') {
+            steps {
+                    sh 'python3 scr/model_preparation.py'
+            }
+        }
+
+        stage('Проверяет модель машинного обучения на построенных данных') {
+            steps {
+                    sh 'python3 scr/model_testing.py'
+            }
+        }
+	}
+	post {
+		always {
+			sh 'echo "Pipline completed."'
+		}
+	}	
+}
